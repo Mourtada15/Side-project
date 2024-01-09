@@ -1,0 +1,27 @@
+.header {
+  padding: 30px 40px 20px 96px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(244, 128, 107, 0.08);
+}
+
+.header img {
+  max-width: 220px;
+}
+
+.header nav {
+  margin-left: auto;
+}
+
+.header nav a {
+  text-decoration: none;
+  color: #E65A41;
+  margin-left: 40px;
+}
+
+.header nav a:hover {
+  color: #b84834;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #b84834;
+  transition: all 0.2s ease-in-out;
+}

@@ -1,0 +1,35 @@
+.memecard-wrapper {
+  width: 90%;
+  margin: 40px auto;
+  display: flex;
+  gap: 100px;
+  /* height: 100vh; */
+}
+
+.memecard-wrapper img {
+  width: 30%;
+  image-rendering: auto;
+  object-fit: cover;
+}
+
+.memecard-wrapper div button {
+  border: unset;
+  color: #FFFFFF;
+  background-color: #e65a41;
+  border-radius: 5px;
+  margin-right:15px;
+  padding: 10px 14px;
+  width: 8rem;
+}
+.memecard-wrapper div button:hover {
+  background-color: #b84834;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.memecard-wrapper div button:nth-of-type(2) {
+  background-color: red;
+}
+.memecard-wrapper div button:nth-of-type(2):hover {
+  background-color: #cc0004
+}
