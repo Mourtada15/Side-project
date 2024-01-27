@@ -25,6 +25,7 @@ export const register = async (req, res) => {
     });
 
     res.status(201).json({ message: 'User created successfully!', user });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
@@ -33,20 +34,19 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  const secretKey = process.env.JWT_SECRET
 
   try {
-
     const user = await User.findOne({ where: { email } });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid email or password!' });
     }
 
-    const token = jwt.sign({ id: user.id }, 'side project secret key', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
     res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 })
-    res.status(200).json({ user: user.id })
+    res.status(200).json({ message: 'Logged in successfully!', user: user.id });
 
-    // res.json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });

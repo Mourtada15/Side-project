@@ -1,37 +1,38 @@
 import Jwt from "jsonwebtoken";
-import User from '../models/userModel.js';
-import Meme from '../models/memeModel.js';
 
-export const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
+export const requireAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  const secretKey = process.env.JWT_SECRET
+
   if (!token) {
-    return res.status(403).json({ message: 'Token not provided' });
+    return res.redirect('/login');
   }
 
-  Jwt.verify(token, 'side project secret key', (err, decoded) => {
+  Jwt.verify(token, secretKey, (err, decodedToken) => {
     if (err) {
-      return res.status(401).json({ message: 'Invalid token' });
+      console.error(err.message);
+      return res.redirect('/login')
     }
 
-    req.userId = decoded.id;
+    console.log(decodedToken);
     next();
-  });
+  })
 };
 
-export const checkMemeOwnerShip = async (req, res, next) => {
-  try {
-    const meme = await Meme.findByPk(req.params.id);
-    if (!meme) {
-      return res.status(404).json({ message: 'Meme not found' });
-    }
+// export const checkMemeOwnerShip = async (req, res, next) => {
+//   try {
+//     const meme = await Meme.findByPk(req.params.id);
+//     if (!meme) {
+//       return res.status(404).json({ message: 'Meme not found' });
+//     }
 
-    if (meme.UserId !== req.userId) {
-      return res.status(403).json({ message: 'Not authorized to perform this action' });
-    }
+//     if (meme.UserId !== req.userId) {
+//       return res.status(403).json({ message: 'Not authorized to perform this action' });
+//     }
 
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error', error: error.message})
-  }
-};
+//     next();
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error', error: error.message})
+//   }
+// };
