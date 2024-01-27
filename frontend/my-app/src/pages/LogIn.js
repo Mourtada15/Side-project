@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './SignUp.css'
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/LOGO.png"
-
+import instance from '../api';
 
 const LogIn = () => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-  });
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [errorMessages, setErrorMessages] = useState([]);
   const navigate = useNavigate();
 
@@ -19,18 +15,19 @@ const LogIn = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(loginData)
 
     try {
-      const response = await axios.post('/auth/login', loginData);
+      const response = await instance.post('/auth/login', loginData);
+      console.log(response)
       const { token } = response.data;
       if (response.data.user) {
         setErrorMessages([]);
         sessionStorage.setItem("LogIn", true)
         navigate("/Home");
+        console.log('Login successful. Token:', token);
       }
 
-      // Handle successful login, e.g., store the token in localStorage, redirect, etc.
-      console.log('Login successful. Token:', token);
     } catch (error) {
       // Handle login error
       console.error('Login error:', error.response?.data?.message || 'Unknown error');
@@ -57,6 +54,7 @@ const LogIn = () => {
           <input type="password" name="password" value={loginData.password} onChange={handleInputChange} required />
           <button type="submit" >LOG IN</button>
         </form>
+        
         {/* Display error messages */}
         {errorMessages.length > 0 && (
           <div className="error-messages">

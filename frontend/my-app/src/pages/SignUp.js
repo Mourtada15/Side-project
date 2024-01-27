@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './SignUp.css'
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/LOGO.png"
+import instance from '../api'
 
 const SignUp = () => {
   const [signUp, setSignUp] = useState({
@@ -26,7 +26,7 @@ const SignUp = () => {
     // setIsPending(true);
 
     try {
-      const response = await axios.post('http://localhost:4000/auth/register', signUp);
+      const response = await instance.post('/auth/register', signUp);
       console.log(response.data);
       setSuccessMessage('User created successfully!');
       setErrorMessages([]);

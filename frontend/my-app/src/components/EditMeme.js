@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './EditMeme.css';
 
-const EditMeme = () => {
+
+const EditMeme = ({setMemes}) => {
   const { id } = useParams();
   const baseURL = 'http://localhost:4000';
   const navigate = useNavigate();
@@ -44,16 +45,18 @@ const EditMeme = () => {
     setEditMode(false);
   };
 
-  const handleDelete = () => {
-    axios.delete(`${baseURL}/memes/${id}`)
-      .then(response => {
-        console.log('Meme deleted successfully:', response);
-        navigate('/Home');
-      })
-      .catch(error => console.error('Error deleting meme:', error));
-  };
-
-  console.log("this is the image url", meme.imageUrl)
+  const handleDelete = async(e) => {
+    e.preventDefault()
+    try{
+      const response = await axios.delete(`${baseURL}/memes/${id}`)
+      setMemes(prevMemes => prevMemes.filter(meme => meme.id !== id));
+      console.log(response)
+      navigate('/Home')
+    }catch(err){
+      console.log(err)
+    }
+   };
+   
 
   return (
     <div className="memecard-wrapper">
@@ -67,6 +70,11 @@ const EditMeme = () => {
               value={editedText}
               onChange={(e) => setEditedText(e.target.value)}
             />
+            {/* <textarea
+              type="text"
+              value={editedText}
+              onChange={(e) => setEditedText(e.target.value)}
+            /> */}
             <button onClick={handleSave}>Save</button>
             <button onClick={handleCancel}>Cancel</button>
           </>

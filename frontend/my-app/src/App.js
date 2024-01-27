@@ -9,18 +9,18 @@ import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import NotFoundPage from './components/NotFound';
+import instance from './api'
+
 const App = () => {
-  const [memes, setMemes] = useState(null)
+  const [memes, setMemes] = useState([]);
 
   useEffect(() => {
     const fetchMemes = async () => { 
       try {
-        const response = await fetch('/memes')
-        const json = await response.json()
+        const response = await instance.get('/memes')
 
-        if (response.ok) {
-          // console.log('Fetched memes:', json);
-          setMemes(json.memes)
+        if (response && response.data.memes) {
+          setMemes(response.data.memes)
         }
       } catch (error) {
         console.error('Error fetching memes', error.message)
@@ -29,36 +29,20 @@ const App = () => {
     fetchMemes()
   }, [])
 
-  // useEffect(() => {
-  //   const fetchMemes = async () => {
-  //     const response = await axios.get("http://localhost:4000/memes/", {
-        
-  //     });
-  //     console.log("hayde el response", response.data);
-  //     setMemes(response.data.data);
-  //   };
-   
-  //     fetchMemes();
-    
-  // }, []);
-
-
-
-
   return (
     <Router>
       <Routes>
         <Route path="/Home" element={
           <>
             <Header />
-            <Memes memes={memes}/>
+            <Memes memes={memes} />
             <Footer />
           </>
         } />
         <Route path="/EditMeme/:id" element={
           <>
             <Header />
-            <EditMeme memes={memes}/>
+            <EditMeme />
             <Footer />
           </>
         } />
@@ -79,4 +63,3 @@ const App = () => {
 }
 
 export default App;
-
